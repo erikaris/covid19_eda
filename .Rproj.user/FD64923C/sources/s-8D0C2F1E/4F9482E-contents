@@ -1,0 +1,43 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Load necessary library
+
+```{r}
+library(tidyverse)
+library(reshape2)
+```
+
+Load dataset
+
+```{r}
+countries_aggregated <- read_csv("dataset/data/countries-aggregated.csv")
+key_countries_pivoted <- read_csv("dataset/data/key-countries-pivoted.csv")
+reference <- read_csv("dataset/data/reference.csv")
+time_series_19_covid_combined <- read_csv("dataset/data/time-series-19-covid-combined.csv")
+us_confirmed <- read_csv("dataset/data/us_confirmed.csv")
+us_deaths <- read_csv("dataset/data/us_deaths.csv")
+worldwide_aggregated <- read_csv("dataset/data/worldwide-aggregated.csv")
+```
+
+Lets take a look globally by country
+
+```{r}
+confirm_recover_death <- time_series_19_covid_combined %>% 
+  group_by(`Country/Region`) %>% 
+  summarize(confirmed=sum(Confirmed), recovered=sum(Recovered), death=sum(Deaths)) %>% 
+  arrange(desc(confirmed))
+confirm_recover_death
+```
+
+```{r}
+confirm_recover_death %>% 
+  gather(key, value, -`Country/Region`) %>% 
+  ggplot(aes(`Country/Region`, value, fill=key)) + geom_bar(stat="identity", position="dodge")
+```
+
+
+
+

@@ -1,0 +1,87 @@
+install.packages("prophet")
+library(tidyverse)
+library(leaflet)
+countries_aggregated <- read_csv("dataset/data/countries-aggregated.csv")
+key_countries_pivoted <- read_csv("dataset/data/key-countries-pivoted.csv")
+reference <- read_csv("dataset/data/reference.csv")
+time_series_19_covid_combined <- read_csv("dataset/data/time-series-19-covid-combined.csv")
+us_confirmed <- read_csv("dataset/data/us_confirmed.csv")
+us_deaths <- read_csv("dataset/data/us_deaths.csv")
+worldwide_aggregated <- read_csv("dataset/data/worldwide-aggregated.csv")
+time_series_19_covid_combined %>%
+select(Date, `Country/Region`, `Province/State`, Confirmed, Recovered, Deaths) %>%
+filter(Date == min(Date) & Confirmed > 0) %>%
+arrange(`Country/Region`)
+time_series_19_covid_combined %>%
+select(Date, `Country/Region`, `Province/State`, Confirmed, Recovered, Deaths) %>%
+filter(Date == max(Date) & Confirmed > 0) %>%
+arrange(`Country/Region`)
+countries_aggregated %>%
+filter(Date == max(Date) & Confirmed > 0) %>%
+select(Country, Confirmed, Recovered, Deaths) %>%
+gather(key, value, -Country) %>%
+ggplot(aes(`Country`, value, fill=key)) + geom_bar(stat="identity", position="dodge")
+ggplot(countries_aggregated,
+aes(x=Date, y=Confirmed, color=`Country`)) +
+geom_line(size=1) +
+scale_x_date(date_breaks = '1 month',
+labels = scales::date_format("%b")) +
+scale_y_continuous() +
+labs(title = "Covid19 Cummulative",
+subtitle = "By Country",
+caption = "source: JHU",
+y = "Confirmed") +
+theme_minimal() +
+theme(legend.position = "none")
+unique(countries_aggregated$Country)
+pal <- colorFactor(c("navy", "red", "green"), domain = c("Confirmed", "Deaths", "Recovered"))
+time_series_19_covid_combined %>%
+filter(Date == last(Date)) %>%
+group_by(`Country/Region`) %>%
+summarize(Lat=first(na.omit(Lat)), Long=first(na.omit(Long)), Confirmed=sum(Confirmed), Recovered=sum(Recovered), Deaths=sum(Deaths)) %>%
+leaflet() %>%
+addTiles() %>%
+addCircleMarkers(
+stroke = FALSE,
+fillOpacity = 0.3,
+radius = ~Confirmed/10000,
+color = ~pal('Confirmed')
+) %>%
+addCircleMarkers(
+stroke = FALSE,
+fillOpacity = 0.4,
+radius = ~Recovered/10000,
+color = ~pal('Recovered')
+) %>%
+addCircleMarkers(
+stroke = FALSE,
+fillOpacity = 0.6,
+radius = ~Deaths/10000,
+color = ~pal('Deaths')
+)
+library(prophet)
+m <- worldwide_aggregated %>%
+rename(ds=Date, y=Confirmed) %>%
+prophet()
+m
+future <- make_future_dataframe(m, periods = 365)
+tail(future)
+forecast <- predict(m, future)
+plot(m, forecast)
+prophet_plot_components(m, forecast)
+m2 <- worldwide_aggregated %>%
+rename(ds=Date, y=Deaths) %>%
+prophet()
+future2 <- make_future_dataframe(m2, periods = 365)
+tail(future2)
+forecast2 <- predict(m2, future2)
+plot(m2, forecast2)
+prophet_plot_components(m2, forecast2)
+m2 <- worldwide_aggregated %>%
+rename(ds=Date, y=Recovered) %>%
+prophet()
+future2 <- make_future_dataframe(m2, periods = 365)
+tail(future2)
+forecast2 <- predict(m2, future2)
+plot(m2, forecast2)
+prophet_plot_components(m2, forecast2)

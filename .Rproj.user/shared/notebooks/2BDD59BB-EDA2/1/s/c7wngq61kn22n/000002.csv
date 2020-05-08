@@ -1,0 +1,5 @@
+"0","countries_aggregated %>% "
+"0","  filter(Date == max(Date) & Confirmed > 0) %>% "
+"0","  select(Country, Confirmed, Recovered, Deaths) %>% "
+"0","  gather(key, value, -Country) %>% "
+"0","  ggplot(aes(`Country`, value, fill=key)) + geom_bar(stat=""identity"", position=""dodge"")"

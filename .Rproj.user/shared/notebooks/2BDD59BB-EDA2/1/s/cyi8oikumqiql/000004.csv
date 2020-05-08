@@ -1,0 +1,2 @@
+"0","forecast2 <- predict(m2, future2)"
+"0","plot(m2, forecast2)"

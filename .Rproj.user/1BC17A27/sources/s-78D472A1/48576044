@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588950289835.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2837141252",
+    "id" : "48576044",
+    "lastKnownWriteTime" : 1588824782,
+    "last_content_update" : 1588824782,
+    "path" : "/run/media/erikaris/DATA/opportunities/webinar_rindo_technaut/2020-Covid19-EDA/dataset/.github/workflows/actions.yml",
+    "project_path" : "dataset/.github/workflows/actions.yml",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "yaml"
+}

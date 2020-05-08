@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588950296910.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "6925819",
+    "id" : "33DCDF3B",
+    "lastKnownWriteTime" : 1588824782,
+    "last_content_update" : 1588824782,
+    "path" : "/run/media/erikaris/DATA/opportunities/webinar_rindo_technaut/2020-Covid19-EDA/dataset/.gitignore",
+    "project_path" : "dataset/.gitignore",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "gitignore"
+}

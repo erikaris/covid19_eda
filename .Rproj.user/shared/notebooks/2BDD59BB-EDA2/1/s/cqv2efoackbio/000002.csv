@@ -1,0 +1,101 @@
+"0","countries_aggregated <- read_csv(""dataset/data/countries-aggregated.csv"")"
+"2","Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = """")[39m,
+  Country = [31mcol_character()[39m,
+  Confirmed = [32mcol_double()[39m,
+  Recovered = [32mcol_double()[39m,
+  Deaths = [32mcol_double()[39m
+)
+"
+"0","key_countries_pivoted <- read_csv(""dataset/data/key-countries-pivoted.csv"")"
+"2","Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = """")[39m,
+  China = [32mcol_double()[39m,
+  US = [32mcol_double()[39m,
+  United_Kingdom = [32mcol_double()[39m,
+  Italy = [32mcol_double()[39m,
+  France = [32mcol_double()[39m,
+  Germany = [32mcol_double()[39m,
+  Spain = [32mcol_double()[39m,
+  Iran = [32mcol_double()[39m
+)
+"
+"0","reference <- read_csv(""dataset/data/reference.csv"")"
+"2","Parsed with column specification:
+cols(
+  UID = [32mcol_double()[39m,
+  iso2 = [31mcol_character()[39m,
+  iso3 = [31mcol_character()[39m,
+  code3 = [32mcol_double()[39m,
+  FIPS = [32mcol_double()[39m,
+  Admin2 = [31mcol_character()[39m,
+  Province_State = [31mcol_character()[39m,
+  Country_Region = [31mcol_character()[39m,
+  Lat = [32mcol_double()[39m,
+  Long_ = [32mcol_double()[39m,
+  Combined_Key = [31mcol_character()[39m,
+  Population = [32mcol_double()[39m
+)
+"
+"0","time_series_19_covid_combined <- read_csv(""dataset/data/time-series-19-covid-combined.csv"")"
+"2","Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = """")[39m,
+  `Country/Region` = [31mcol_character()[39m,
+  `Province/State` = [31mcol_character()[39m,
+  Lat = [32mcol_double()[39m,
+  Long = [32mcol_double()[39m,
+  Confirmed = [32mcol_double()[39m,
+  Recovered = [32mcol_double()[39m,
+  Deaths = [32mcol_double()[39m
+)
+"
+"0","us_confirmed <- read_csv(""dataset/data/us_confirmed.csv"")"
+"2","Parsed with column specification:
+cols(
+  UID = [32mcol_double()[39m,
+  iso2 = [31mcol_character()[39m,
+  iso3 = [31mcol_character()[39m,
+  code3 = [32mcol_double()[39m,
+  FIPS = [32mcol_double()[39m,
+  Admin2 = [31mcol_character()[39m,
+  Lat = [32mcol_double()[39m,
+  Combined_Key = [31mcol_character()[39m,
+  Date = [34mcol_date(format = """")[39m,
+  Case = [32mcol_double()[39m,
+  Long = [32mcol_double()[39m,
+  `Country/Region` = [31mcol_character()[39m,
+  `Province/State` = [31mcol_character()[39m
+)
+"
+"0","us_deaths <- read_csv(""dataset/data/us_deaths.csv"")"
+"2","Parsed with column specification:
+cols(
+  UID = [32mcol_double()[39m,
+  iso2 = [31mcol_character()[39m,
+  iso3 = [31mcol_character()[39m,
+  code3 = [32mcol_double()[39m,
+  FIPS = [32mcol_double()[39m,
+  Admin2 = [31mcol_character()[39m,
+  Lat = [32mcol_double()[39m,
+  Combined_Key = [31mcol_character()[39m,
+  Population = [32mcol_double()[39m,
+  Date = [34mcol_date(format = """")[39m,
+  Case = [32mcol_double()[39m,
+  Long = [32mcol_double()[39m,
+  `Country/Region` = [31mcol_character()[39m,
+  `Province/State` = [31mcol_character()[39m
+)
+"
+"0","worldwide_aggregated <- read_csv(""dataset/data/worldwide-aggregated.csv"")"
+"2","Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = """")[39m,
+  Confirmed = [32mcol_double()[39m,
+  Recovered = [32mcol_double()[39m,
+  Deaths = [32mcol_double()[39m,
+  `Increase rate` = [32mcol_double()[39m
+)
+"

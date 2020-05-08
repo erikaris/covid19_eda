@@ -1,0 +1,164 @@
+---
+title: "EDA2"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+library(tidyverse)
+library(leaflet)
+```
+
+Load dataset
+
+```{r}
+countries_aggregated <- read_csv("dataset/data/countries-aggregated.csv")
+key_countries_pivoted <- read_csv("dataset/data/key-countries-pivoted.csv")
+reference <- read_csv("dataset/data/reference.csv")
+time_series_19_covid_combined <- read_csv("dataset/data/time-series-19-covid-combined.csv")
+us_confirmed <- read_csv("dataset/data/us_confirmed.csv")
+us_deaths <- read_csv("dataset/data/us_deaths.csv")
+worldwide_aggregated <- read_csv("dataset/data/worldwide-aggregated.csv")
+```
+
+Earliest Cases
+
+```{r}
+time_series_19_covid_combined %>% 
+  select(Date, `Country/Region`, `Province/State`, Confirmed, Recovered, Deaths) %>% 
+  filter(Date == min(Date) & Confirmed > 0) %>% 
+  arrange(`Country/Region`)
+```
+
+Latest Cases
+
+```{r}
+time_series_19_covid_combined %>% 
+  select(Date, `Country/Region`, `Province/State`, Confirmed, Recovered, Deaths) %>% 
+  filter(Date == max(Date) & Confirmed > 0) %>% 
+  arrange(`Country/Region`)
+```
+
+Summary Plot of Worldwide Cases - Confirmed, Deaths & Recovered
+
+```{r}
+countries_aggregated %>% 
+  filter(Date == max(Date) & Confirmed > 0) %>% 
+  select(Country, Confirmed, Recovered, Deaths) %>% 
+  gather(key, value, -Country) %>% 
+  ggplot(aes(`Country`, value, fill=key)) + geom_bar(stat="identity", position="dodge")
+```
+
+Worldwide Corona Virus Cases - Confirmed, Deaths, Recovered (Line Chart)
+
+```{r}
+ggplot(countries_aggregated, 
+       aes(x=Date, y=Confirmed, color=`Country`)) + 
+  geom_line(size=1) +
+  scale_x_date(date_breaks = '1 month', 
+               labels = scales::date_format("%b")) +
+  scale_y_continuous() +
+  labs(title = "Covid19 Cummulative",
+       subtitle = "By Country",
+       caption = "source: JHU",
+       y = "Confirmed") +
+  theme_minimal() + 
+  theme(legend.position = "none")
+```
+
+Countries/Regions Affected
+
+```{r}
+unique(countries_aggregated$Country)
+```
+
+Countries/Regions Affected (Map)
+
+```{r}
+pal <- colorFactor(c("navy", "red", "green"), domain = c("Confirmed", "Deaths", "Recovered"))
+
+time_series_19_covid_combined %>% 
+  filter(Date == last(Date)) %>% 
+  group_by(`Country/Region`) %>% 
+  summarize(Lat=first(na.omit(Lat)), Long=first(na.omit(Long)), Confirmed=sum(Confirmed), Recovered=sum(Recovered), Deaths=sum(Deaths)) %>%
+  leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(
+    stroke = FALSE, 
+    fillOpacity = 0.3, 
+    radius = ~Confirmed/10000, 
+    color = ~pal('Confirmed')
+  ) %>% 
+  addCircleMarkers(
+    stroke = FALSE, 
+    fillOpacity = 0.4, 
+    radius = ~Recovered/10000, 
+    color = ~pal('Recovered')
+  ) %>% 
+  addCircleMarkers(
+    stroke = FALSE, 
+    fillOpacity = 0.6, 
+    radius = ~Deaths/10000, 
+    color = ~pal('Deaths')
+  ) 
+```
+
+Forecasting Total Number of Cases Worldwide
+
+Prophet
+We use Prophet, a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It works best with time series that have strong seasonal effects and several seasons of historical data. Prophet is robust to missing data and shifts in the trend, and typically handles outliers well. It is also an open source software released by Facebook’s Core Data Science team. It is available for download on CRAN and PyPI.
+
+Why Prophet?
+Prophet is easy to customize and use, and to produce accurate forecasts which can be explained intuitively with supporting evidence such as forecast seasonality components. It allows the analyst to explain in an intuitive and convinving manner to higher management as to why the forecasts are as such, and the plausible underlying factors that contribute to its result. Furthermore, it is also open-source! :)
+
+```{r}
+library(prophet)
+```
+
+Predict Confirmed Trend
+
+```{r}
+m <- worldwide_aggregated %>%
+  rename(ds=Date, y=Confirmed) %>%
+  prophet()
+m
+```
+
+Predictions are made on a dataframe with a column ds containing the dates for which predictions are to be made. The make_future_dataframe function takes the model object and a number of periods to forecast and produces a suitable dataframe. By default it will also include the historical dates so we can evaluate in-sample fit.
+
+```{r}
+future <- make_future_dataframe(m, periods = 365)
+tail(future)
+forecast <- predict(m, future)
+plot(m, forecast)
+prophet_plot_components(m, forecast)
+```
+
+Predict Deaths Trend
+
+```{r}
+m2 <- worldwide_aggregated %>%
+  rename(ds=Date, y=Deaths) %>%
+  prophet()
+
+future2 <- make_future_dataframe(m2, periods = 365)
+tail(future2)
+forecast2 <- predict(m2, future2)
+plot(m2, forecast2)
+prophet_plot_components(m2, forecast2)
+```
+
+Predict Recovered Trend
+
+```{r}
+m2 <- worldwide_aggregated %>%
+  rename(ds=Date, y=Recovered) %>%
+  prophet()
+
+future2 <- make_future_dataframe(m2, periods = 365)
+tail(future2)
+forecast2 <- predict(m2, future2)
+plot(m2, forecast2)
+prophet_plot_components(m2, forecast2)
+```

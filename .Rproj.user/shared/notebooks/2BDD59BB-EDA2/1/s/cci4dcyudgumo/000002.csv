@@ -1,0 +1,9 @@
+"0","m2 <- worldwide_aggregated %>%"
+"0","  rename(ds=Date, y=Recovered) %>%"
+"0","  prophet()"
+"2","Disabling yearly seasonality. Run prophet with yearly.seasonality=TRUE to override this.
+"
+"2","Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+"
+"0","future2 <- make_future_dataframe(m2, periods = 365)"
+"0","tail(future2)"

@@ -1,0 +1,4 @@
+"0","time_series_19_covid_combined %>% "
+"0","  select(Date, `Country/Region`, `Province/State`, Confirmed, Recovered, Deaths) %>% "
+"0","  filter(Date == max(Date) & Confirmed > 0) %>% "
+"0","  arrange(`Country/Region`)"
